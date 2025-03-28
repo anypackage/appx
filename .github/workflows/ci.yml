@@ -41,7 +41,7 @@ jobs:
           path: C:\Users\runneradmin\Documents\PowerShell\Modules\AnyPackage.Appx\
 
       - name: Install AnyPackage modules
-        run: Install-Module AnyPackage -Force -AllowClobber
+        run: Install-PSResource AnyPackage
 
       - name: Test with Pester
         run: |
@@ -104,11 +104,11 @@ jobs:
           path: '~/.local/share/powershell/Modules/AnyPackage.Appx'
 
       - name: Install AnyPackage modules
-        run: Install-Module AnyPackage -Force -AllowClobber
+        run: Install-PSResource AnyPackage
 
       - name: Publish Module
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
         run: |
           $env:PSModulePath += ";$($env:windir)\system32\WindowsPowerShell\v1.0\Modules"
-          Publish-Module -Name AnyPackage.Appx -NuGetApiKey $env:NUGET_KEY
+          Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx'
