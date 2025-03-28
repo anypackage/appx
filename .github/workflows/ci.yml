@@ -41,7 +41,7 @@ jobs:
           path: C:\Users\runneradmin\Documents\PowerShell\Modules\AnyPackage.Appx\
 
       - name: Install AnyPackage modules
-        run: Install-PSResource AnyPackage
+        run: Install-PSResource AnyPackage -TrustRepository
 
       - name: Test with Pester
         run: |
@@ -104,7 +104,7 @@ jobs:
           path: '~/.local/share/powershell/Modules/AnyPackage.Appx'
 
       - name: Install AnyPackage modules
-        run: Install-PSResource AnyPackage
+        run: Install-PSResource AnyPackage -TrustRepository
 
       - name: Publish Module
         env:
