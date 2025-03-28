@@ -16,7 +16,8 @@
 ## Install AnyPackage.Appx
 
 ```powershell
-Install-PSResource AnyPackage.Appx
+Install-PSResource AnyPackage
+Install-PSResource AnyPackage.Appx -SkipDependencyCheck
 ```
 
 ## Import AnyPackage.Appx
