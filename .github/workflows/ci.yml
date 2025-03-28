@@ -52,7 +52,7 @@ jobs:
   Sign:
     needs: Test
     if: github.event_name == 'release' && github.event.action == 'published'
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
