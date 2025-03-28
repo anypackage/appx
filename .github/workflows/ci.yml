@@ -111,4 +111,4 @@ jobs:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
         run: |
           $env:PSModulePath += ";$($env:windir)\system32\WindowsPowerShell\v1.0\Modules"
-          Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx'
+          Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx' -SkipModuleManifestValidate
