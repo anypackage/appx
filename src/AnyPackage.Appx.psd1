@@ -21,6 +21,7 @@
             Tags = @('AnyPackage', 'Provider', 'Appx', 'Windows')
             LicenseUri = 'https://github.com/anypackage/appx/blob/main/LICENSE'
             ProjectUri = 'https://github.com/anypackage/appx'
+            ExternalModuleDependencies = @('Appx')
         }
     }
     HelpInfoURI = 'https://go.anypackage.dev/help'
