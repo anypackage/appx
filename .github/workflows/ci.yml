@@ -40,8 +40,8 @@ jobs:
           name: module
           path: C:\Users\runneradmin\Documents\PowerShell\Modules\AnyPackage.Appx\
 
-      - name: Install AnyPackage and Appx modules
-        run: Install-Module AnyPackage, Appx -Force -AllowClobber
+      - name: Install AnyPackage modules
+        run: Install-Module AnyPackage -Force -AllowClobber
 
       - name: Test with Pester
         run: |
@@ -102,8 +102,8 @@ jobs:
           name: module-signed
           path: '~/.local/share/powershell/Modules/AnyPackage.Appx'
 
-      - name: Install AnyPackage and Appx modules
-        run: Install-Module AnyPackage, Appx -Force -AllowClobber
+      - name: Install AnyPackage modules
+        run: Install-Module AnyPackage-Force -AllowClobber
 
       - name: Publish Module
         env:
