@@ -103,7 +103,7 @@ jobs:
           path: '~/.local/share/powershell/Modules/AnyPackage.Appx'
 
       - name: Install AnyPackage modules
-        run: Install-Module AnyPackage-Force -AllowClobber
+        run: Install-Module AnyPackage -Force -AllowClobber
 
       - name: Publish Module
         env:
