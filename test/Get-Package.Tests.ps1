@@ -1,4 +1,4 @@
-#Requires -Modules AnyPackage.Scoop
+#Requires -Modules AnyPackage.Appx
 
 Describe Get-Package {
     Context 'with no parameters' {
