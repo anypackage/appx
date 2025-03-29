@@ -29,7 +29,7 @@ jobs:
 
   Test:
     needs: Build
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -45,7 +45,6 @@ jobs:
 
       - name: Test with Pester
         run: |
-          $env:PSModulePath += ";$($env:windir)\system32\WindowsPowerShell\v1.0\Modules"
           $ht = Import-PowerShellDataFile PesterSettings.psd1
           $config = New-PesterConfiguration $ht
           Invoke-Pester -Configuration $config
@@ -53,7 +52,7 @@ jobs:
   Sign:
     needs: Test
     if: github.event_name == 'release' && github.event.action == 'published'
-    runs-on: windows-2025
+    runs-on: windows-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -94,14 +93,14 @@ jobs:
   Publish:
     needs: Sign
     if: github.event_name == 'release' && github.event.action == 'published'
-    runs-on: ubuntu-latest
+    runs-on: windows-2025
     steps:
 
       - name: Download module
         uses: actions/download-artifact@v4
         with:
           name: module-signed
-          path: '~/.local/share/powershell/Modules/AnyPackage.Appx'
+          path: C:\Users\runneradmin\Documents\PowerShell\Modules\AnyPackage.Appx\
 
       - name: Install AnyPackage modules
         run: Install-PSResource AnyPackage -TrustRepository
@@ -110,5 +109,4 @@ jobs:
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
         run: |
-          $env:PSModulePath += ";$($env:windir)\system32\WindowsPowerShell\v1.0\Modules"
-          Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx' -SkipModuleManifestValidate
+          Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx'

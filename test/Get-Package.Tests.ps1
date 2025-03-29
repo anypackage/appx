@@ -1,17 +1,22 @@
-# TODO: Figure out why tests are failing
+#Requires -Modules AnyPackage.Appx
 
 Describe Get-Package {
     Context 'with no parameters' {
-        It 'should return results' -Skip {
+        It 'should return results' {
             Get-Package |
-            Should -Not -BeNullOrEmpty
+                Should -Not -BeNullOrEmpty
         }
     }
 
     Context 'with -Name parameter' {
-        It 'should return Microsoft.Paint' -Skip {
-            Get-Package -Name Microsoft.Paint |
-            Should -Not -BeNullOrEmpty
+        It 'should return Microsoft.WindowsFeedbackHub' {
+            Get-Package -Name Microsoft.WindowsFeedbackHub |
+                Should -Not -BeNullOrEmpty
+        }
+
+        It 'should return with wildcards' {
+            Get-Package -Name Microsoft* |
+                Should -Not -BeNullOrEmpty
         }
     }
 }

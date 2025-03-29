@@ -21,7 +21,7 @@ jobs:
       contents: read
       security-events: write
     name: PSScriptAnalyzer
-    runs-on: ubuntu-latest
+    runs-on: windows-2025
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
