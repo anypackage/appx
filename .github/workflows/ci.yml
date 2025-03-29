@@ -100,7 +100,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: module-signed
-          path: '~/.local/share/powershell/Modules/AnyPackage.Appx'
+          path: C:\Users\runneradmin\Documents\PowerShell\Modules\AnyPackage.Appx\
 
       - name: Install AnyPackage modules
         run: Install-PSResource AnyPackage -TrustRepository
