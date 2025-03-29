@@ -9,11 +9,13 @@ Describe Get-Package {
     }
 
     Context 'with -Name parameter' {
-        It 'should return Microsoft.WindowsStore' {
-            $packages = Get-Package
-            Write-Verbose ($packages | Out-String) -Verbose
-            
-            Get-Package -Name Microsoft.WindowsStore |
+        It 'should return Microsoft.WindowsFeedbackHub' {
+            Get-Package -Name Microsoft.WindowsFeedbackHub |
+            Should -Not -BeNullOrEmpty
+        }
+
+        It 'should return with wildcards' {
+            Get-Package -Name Microsoft* |
             Should -Not -BeNullOrEmpty
         }
     }
