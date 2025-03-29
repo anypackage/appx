@@ -11,7 +11,7 @@ using namespace Microsoft.Windows.Appx.PackageManager.Commands
 [PackageProvider('Appx')]
 class AppxProvider : PackageProvider, IGetPackage {
     [string[]] $Members = @()
-    
+
     [void] GetPackage([PackageRequest] $request) {
         $getAppxPackageParams = @{ Name = $request.Name }
 
@@ -34,7 +34,7 @@ class AppxProvider : PackageProvider, IGetPackage {
         if ($request.DynamicParameters.AllUsers) {
             $getAppxPackageParams['AllUsers'] = $request.DynamicParameters.AllUsers
         }
-        
+
         foreach ($appx in (Get-AppxPackage @getAppxPackageParams)) {
             if (!$request.IsMatch([PackageVersion]$appx.Version)) {
                 continue
@@ -69,7 +69,7 @@ class GetPackageDynamicParameters {
     [Parameter()]
     [ValidateNotNullOrEmpty()]
     [string] $Publisher
-    
+
     [Parameter()]
     [PackageTypes] $PackageTypeFilter
 
