@@ -45,7 +45,7 @@ jobs:
 
       - name: Test with Pester
         run: |
-          # $env:PSModulePath += ";$($env:windir)\system32\WindowsPowerShell\v1.0\Modules"
+          Get-Module -ListAvailable
           $ht = Import-PowerShellDataFile PesterSettings.psd1
           $config = New-PesterConfiguration $ht
           Invoke-Pester -Configuration $config
@@ -110,5 +110,4 @@ jobs:
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
         run: |
-          $env:PSModulePath += ";$($env:windir)\system32\WindowsPowerShell\v1.0\Modules"
           Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx' -SkipModuleManifestValidate
