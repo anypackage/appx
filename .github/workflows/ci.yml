@@ -29,7 +29,7 @@ jobs:
 
   Test:
     needs: Build
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -45,7 +45,6 @@ jobs:
 
       - name: Test with Pester
         run: |
-          Get-Module -ListAvailable
           $ht = Import-PowerShellDataFile PesterSettings.psd1
           $config = New-PesterConfiguration $ht
           Invoke-Pester -Configuration $config
@@ -94,7 +93,7 @@ jobs:
   Publish:
     needs: Sign
     if: github.event_name == 'release' && github.event.action == 'published'
-    runs-on: ubuntu-latest
+    runs-on: windows-2025
     steps:
 
       - name: Download module
@@ -110,4 +109,4 @@ jobs:
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
         run: |
-          Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx' -SkipModuleManifestValidate
+          Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx'
