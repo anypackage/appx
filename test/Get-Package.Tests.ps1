@@ -1,4 +1,4 @@
-# TODO: Figure out why tests are failing
+#Requires -Modules Appx
 
 Describe Get-Package {
     Context 'with no parameters' {
