@@ -1,4 +1,4 @@
-#Requires -Modules Appx
+#Requires -Modules AnyPackage.Appx
 
 Describe Get-Package {
     Context 'with no parameters' {
