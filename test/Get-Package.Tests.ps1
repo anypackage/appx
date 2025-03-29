@@ -9,8 +9,8 @@ Describe Get-Package {
     }
 
     Context 'with -Name parameter' {
-        It 'should return Microsoft.Paint' {
-            Get-Package -Name Microsoft.Paint |
+        It 'should return Microsoft.WindowsStore' {
+            Get-Package -Name Microsoft.WindowsStore |
             Should -Not -BeNullOrEmpty
         }
     }
