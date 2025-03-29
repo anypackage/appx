@@ -10,6 +10,9 @@ Describe Get-Package {
 
     Context 'with -Name parameter' {
         It 'should return Microsoft.WindowsStore' {
+            $packages = Get-Package
+            Write-Verbose ($packages | Out-String) -Verbose
+            
             Get-Package -Name Microsoft.WindowsStore |
             Should -Not -BeNullOrEmpty
         }
