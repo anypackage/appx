@@ -9,7 +9,7 @@ using namespace Windows.Management.Deployment
 using namespace Microsoft.Windows.Appx.PackageManager.Commands
 
 [PackageProvider('Appx')]
-class AppxProvider : PackageProvider, IGetPackage {
+class AppxProvider : PackageProvider, IGetPackage, IUninstallPackage {
     [string[]] $Members = @()
 
     [void] GetPackage([PackageRequest] $request) {
@@ -57,6 +57,28 @@ class AppxProvider : PackageProvider, IGetPackage {
         }
     }
 
+    [void] UninstallPackage([PackageRequest] $request) {
+        $removeAppxPackageParameters = @{ ErrorAction = 'Stop' }
+
+        if ($request.DynamicParameters.User) {
+            $removeAppxPackageParameters['User'] = $request.DynamicParameters.User
+        }
+
+        if ($request.DynamicParameters.PreserveRoamableApplicationData) {
+            $removeAppxPackageParameters['PreserveRoamableApplicationData'] = $request.DynamicParameters.PreserveRoamableApplicationData
+        }
+
+        if ($request.DynamicParameters.PreserveApplicationData) {
+            $removeAppxPackageParameters['PreserveApplicationData'] = $request.DynamicParameters.PreserveApplicationData
+        }
+
+        Get-Package -Name $request.Name -Provider $request.ProviderInfo |
+            ForEach-Object {
+                Remove-AppxPackage -Package $_.Metadata['PackageFullName'] @removeAppxPackageParameters
+                $request.WritePackage($_)
+            }
+    }
+
     [object] GetDynamicParameters([string] $commandName) {
         return $(switch ($commandName) {
                 'Get-Package' { return [GetPackageDynamicParameters]::new() }
@@ -82,6 +104,18 @@ class GetPackageDynamicParameters {
 
     [Parameter()]
     [switch] $AllUsers
+}
+
+class UninstallPackageDynamicParameters {
+    [Parameter()]
+    [ValidateNotNullOrEmpty()]
+    [string] $User
+
+    [Parameter()]
+    [switch] $PreserveRoamableApplicationData
+
+    [Parameter()]
+    [switch] $PreserveApplicationData
 }
 
 [guid] $id = '429b9f84-2d16-48bd-aace-f0d6bf5d04e5'
