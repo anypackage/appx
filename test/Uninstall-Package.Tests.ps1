@@ -3,7 +3,7 @@
 Describe Uninstall-Package {
     Context 'with -Name parameter' {
         It 'should uninstall Microsoft.WindowsFeedbackHub' {
-            Uninstall-Package -Name Microsoft.WindowsFeedbackHub |
+            Uninstall-Package -Name Microsoft.WindowsFeedbackHub -PassThru |
                 Should -Not -BeNullOrEmpty
         }
     }
