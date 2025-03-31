@@ -73,7 +73,7 @@ class AppxProvider : PackageProvider, IGetPackage, IUninstallPackage {
         }
 
         Get-Package -Name $request.Name -Provider $request.ProviderInfo |
-            ForEach-Object { 
+            ForEach-Object {
                 Remove-AppxPackage -Package $_.Metadata['PackageFullName'] @removeAppxPackageParameters
                 $request.WritePackage($_)
             }
