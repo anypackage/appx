@@ -1,4 +1,4 @@
-﻿# Copyright (c) Thomas Nieto - All Rights Reserved
+# Copyright (c) Thomas Nieto - All Rights Reserved
 # You may use, distribute and modify this code under the
 # terms of the MIT license.
 
@@ -82,6 +82,7 @@ class AppxProvider : PackageProvider, IGetPackage, IUninstallPackage {
     [object] GetDynamicParameters([string] $commandName) {
         return $(switch ($commandName) {
                 'Get-Package' { return [GetPackageDynamicParameters]::new() }
+                'Uninstall-Package' { return [UninstallPackageDynamicParameters]::new() }
                 default { $null }
             })
     }
