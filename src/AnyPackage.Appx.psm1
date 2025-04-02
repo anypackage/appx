@@ -1,4 +1,4 @@
-# Copyright (c) Thomas Nieto - All Rights Reserved
+﻿# Copyright (c) Thomas Nieto - All Rights Reserved
 # You may use, distribute and modify this code under the
 # terms of the MIT license.
 
@@ -8,8 +8,8 @@ using namespace AnyPackage.Provider
 using namespace Windows.Management.Deployment
 using namespace Microsoft.Windows.Appx.PackageManager.Commands
 
-[PackageProvider('Appx')]
-class AppxProvider : PackageProvider, IGetPackage, IUninstallPackage {
+[PackageProvider('Appx', PackageByName = $false, FileExtensions = ('.appx', '.msix', '.msixbundle', '.appinstaller'))]
+class AppxProvider : PackageProvider, IGetPackage, IInstallPackage, IUninstallPackage {
     [string[]] $Members = @()
 
     [void] GetPackage([PackageRequest] $request) {
@@ -57,6 +57,15 @@ class AppxProvider : PackageProvider, IGetPackage, IUninstallPackage {
         }
     }
 
+    [void] InstallPackage([PackageRequest] $request) {
+        $addAppxPackageParameters = @{
+            Path = $request.Path
+            ErrorAction = 'Stop'
+        }
+
+        Add-AppxPackage @addAppxPackageParameters
+    }
+
     [void] UninstallPackage([PackageRequest] $request) {
         $removeAppxPackageParameters = @{ ErrorAction = 'Stop' }
 
@@ -82,6 +91,7 @@ class AppxProvider : PackageProvider, IGetPackage, IUninstallPackage {
     [object] GetDynamicParameters([string] $commandName) {
         return $(switch ($commandName) {
                 'Get-Package' { return [GetPackageDynamicParameters]::new() }
+                'Install-Package' { return [InstallPackageDynamicParameters]::new() }
                 'Uninstall-Package' { return [UninstallPackageDynamicParameters]::new() }
                 default { $null }
             })
@@ -117,6 +127,77 @@ class UninstallPackageDynamicParameters {
 
     [Parameter()]
     [switch] $PreserveApplicationData
+}
+
+class InstallPackageDynamicParameters {
+    [Parameter()]
+    [switch] $AllowUnsigned
+
+    [Parameter()]
+    [string] $AppInstallerFile
+
+    [Parameter()]
+    [switch] $DeferRegistrationWhenPackagesAreInUse
+
+    [Parameter()]
+    [string[]] $DependencyPackages
+
+    [Parameter()]
+    [string[]] $DependencyPath
+
+    [Parameter()]
+    [switch] $DisableDevelopmentMode
+
+    [Parameter()]
+    [string] $ExternalLocation
+
+    [Parameter()]
+    [string[]] $ExternalPackages
+
+    [Parameter()]
+    [switch] $ForceApplicationShutdown
+
+    [Parameter()]
+    [switch] $ForceUpdateFromAnyVersion
+
+    [Parameter()]
+    [switch] $InstallAllResources
+
+    [Parameter()]
+    [switch] $LimitToExistingPackages
+
+    [Parameter()]
+    [string] $MainPackage
+
+    [Parameter()]
+    [string[]] $OptionalPackages
+
+    [Parameter()]
+    [switch] $Register
+
+    [Parameter()]
+    [switch] $RegisterByFamilyName
+
+    [Parameter()]
+    [string[]] $RelatedPackages
+
+    [Parameter()]
+    [switch] $RequiredContentGroupOnly
+
+    [Parameter()]
+    [switch] $RetainFilesOnFailure
+
+    [Parameter()]
+    [switch] $Stage
+
+    [Parameter()]
+    [StubPackageOption] $StubPackageOption
+
+    [Parameter()]
+    [switch] $Update
+
+    [Parameter()]
+    [AppxVolume] $Volume
 }
 
 [guid] $id = '429b9f84-2d16-48bd-aace-f0d6bf5d04e5'
