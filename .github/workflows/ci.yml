@@ -120,4 +120,4 @@ jobs:
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
         run: |
-          Publish-PSResource -ApiKey $env:NUGET_KEY -Path '~/.local/share/powershell/Modules/AnyPackage.Appx'
+          Publish-PSResource -ApiKey $env:NUGET_KEY -Path C:\Users\runneradmin\Documents\PowerShell\Modules\AnyPackage.Appx
