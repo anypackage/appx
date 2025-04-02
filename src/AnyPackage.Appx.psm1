@@ -10,7 +10,7 @@ using namespace Microsoft.Windows.Appx.PackageManager.Commands
 using namespace Microsoft.Msix.Utils.AppxPackaging
 using namespace System.IO
 
-[PackageProvider('Appx', PackageByName = $false, FileExtensions = ('.appx', '.msix', '.msixbundle', '.appinstaller'))]
+[PackageProvider('Appx', PackageByName = $false, FileExtensions = ('.appx', '.msix', '.msixbundle'))]
 class AppxProvider : PackageProvider, IFindPackage, IGetPackage, IInstallPackage, IUninstallPackage {
     [string[]] $Members = @()
 
@@ -82,11 +82,19 @@ class AppxProvider : PackageProvider, IFindPackage, IGetPackage, IInstallPackage
 
     [void] InstallPackage([PackageRequest] $request) {
         $addAppxPackageParameters = @{
-            Path = $request.Path
             ErrorAction = 'Stop'
+        }
+        
+        if ($request.Package) {
+            $package = $request.Package
+            $addAppxPackageParameters['Path'] = $request.Package.Source.Location
+        } else {
+            $package = Find-Package -Path $request.Path -Provider $request.ProviderInfo
+            $addAppxPackageParameters['Path'] = $request.Path
         }
 
         Add-AppxPackage @addAppxPackageParameters
+        $request.WritePackage($package)
     }
 
     [void] UninstallPackage([PackageRequest] $request) {
@@ -114,7 +122,7 @@ class AppxProvider : PackageProvider, IFindPackage, IGetPackage, IInstallPackage
     [object] GetDynamicParameters([string] $commandName) {
         return $(switch ($commandName) {
                 'Get-Package' { return [GetPackageDynamicParameters]::new() }
-                'Install-Package' { return [InstallPackageDynamicParameters]::new() }
+                # 'Install-Package' { return [InstallPackageDynamicParameters]::new() }
                 'Uninstall-Package' { return [UninstallPackageDynamicParameters]::new() }
                 default { $null }
             })
