@@ -1,4 +1,4 @@
-# Copyright (c) Thomas Nieto - All Rights Reserved
+﻿# Copyright (c) Thomas Nieto - All Rights Reserved
 # You may use, distribute and modify this code under the
 # terms of the MIT license.
 
@@ -11,7 +11,7 @@ using namespace Microsoft.Msix.Utils.AppxPackaging
 using namespace System.IO
 
 [PackageProvider('Appx', PackageByName = $false, FileExtensions = ('.appx', '.msix', '.msixbundle'))]
-class AppxProvider : PackageProvider, IFindPackage, IGetPackage, IUninstallPackage {
+class AppxProvider : PackageProvider, IFindPackage, IGetPackage, IInstallPackage, IUninstallPackage {
     [string[]] $Members = @()
 
     [void] FindPackage([PackageRequest] $request) {
@@ -80,6 +80,23 @@ class AppxProvider : PackageProvider, IFindPackage, IGetPackage, IUninstallPacka
         }
     }
 
+    [void] InstallPackage([PackageRequest] $request) {
+        $addAppxPackageParameters = @{
+            ErrorAction = 'Stop'
+        }
+        
+        if ($request.Package) {
+            $package = $request.Package
+            $addAppxPackageParameters['Path'] = $request.Package.Source.Location
+        } else {
+            $package = Find-Package -Path $request.Path -Provider $request.ProviderInfo
+            $addAppxPackageParameters['Path'] = $request.Path
+        }
+
+        Add-AppxPackage @addAppxPackageParameters
+        $request.WritePackage($package)
+    }
+
     [void] UninstallPackage([PackageRequest] $request) {
         $removeAppxPackageParameters = @{ ErrorAction = 'Stop' }
 
@@ -105,6 +122,7 @@ class AppxProvider : PackageProvider, IFindPackage, IGetPackage, IUninstallPacka
     [object] GetDynamicParameters([string] $commandName) {
         return $(switch ($commandName) {
                 'Get-Package' { return [GetPackageDynamicParameters]::new() }
+                # 'Install-Package' { return [InstallPackageDynamicParameters]::new() }
                 'Uninstall-Package' { return [UninstallPackageDynamicParameters]::new() }
                 default { $null }
             })
@@ -140,6 +158,77 @@ class UninstallPackageDynamicParameters {
 
     [Parameter()]
     [switch] $PreserveApplicationData
+}
+
+class InstallPackageDynamicParameters {
+    [Parameter()]
+    [switch] $AllowUnsigned
+
+    [Parameter()]
+    [string] $AppInstallerFile
+
+    [Parameter()]
+    [switch] $DeferRegistrationWhenPackagesAreInUse
+
+    [Parameter()]
+    [string[]] $DependencyPackages
+
+    [Parameter()]
+    [string[]] $DependencyPath
+
+    [Parameter()]
+    [switch] $DisableDevelopmentMode
+
+    [Parameter()]
+    [string] $ExternalLocation
+
+    [Parameter()]
+    [string[]] $ExternalPackages
+
+    [Parameter()]
+    [switch] $ForceApplicationShutdown
+
+    [Parameter()]
+    [switch] $ForceUpdateFromAnyVersion
+
+    [Parameter()]
+    [switch] $InstallAllResources
+
+    [Parameter()]
+    [switch] $LimitToExistingPackages
+
+    [Parameter()]
+    [string] $MainPackage
+
+    [Parameter()]
+    [string[]] $OptionalPackages
+
+    [Parameter()]
+    [switch] $Register
+
+    [Parameter()]
+    [switch] $RegisterByFamilyName
+
+    [Parameter()]
+    [string[]] $RelatedPackages
+
+    [Parameter()]
+    [switch] $RequiredContentGroupOnly
+
+    [Parameter()]
+    [switch] $RetainFilesOnFailure
+
+    [Parameter()]
+    [switch] $Stage
+
+    [Parameter()]
+    [StubPackageOption] $StubPackageOption
+
+    [Parameter()]
+    [switch] $Update
+
+    [Parameter()]
+    [AppxVolume] $Volume
 }
 
 [guid] $id = '429b9f84-2d16-48bd-aace-f0d6bf5d04e5'
