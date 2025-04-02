@@ -10,6 +10,7 @@
     RequiredModules = @(
         @{ ModuleName = 'AnyPackage'; ModuleVersion = '0.9.0' },
         'Appx')
+    RequiredAssemblies = @('Microsoft.Msix.Utils.dll')
     FunctionsToExport = @()
     CmdletsToExport = @()
     AliasesToExport = @()

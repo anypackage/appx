@@ -7,10 +7,33 @@ using module Appx
 using namespace AnyPackage.Provider
 using namespace Windows.Management.Deployment
 using namespace Microsoft.Windows.Appx.PackageManager.Commands
+using namespace Microsoft.Msix.Utils.AppxPackaging
+using namespace System.IO
 
-[PackageProvider('Appx')]
-class AppxProvider : PackageProvider, IGetPackage, IUninstallPackage {
+[PackageProvider('Appx', PackageByName = $false, FileExtensions = ('.appx', '.msix', '.msixbundle'))]
+class AppxProvider : PackageProvider, IFindPackage, IGetPackage, IUninstallPackage {
     [string[]] $Members = @()
+
+    [void] FindPackage([PackageRequest] $request) {
+        $appx = if ([Path]::GetExtension($request.Path) -eq '.msixbundle') {
+            [AppxBundleMetadata]::new($request.Path)
+        } else {
+            [AppxMetadata]::new($request.Path)
+        }
+
+        $metadata = @{ }
+        $properties = $appx |
+            Get-Member -Type Properties |
+            Select-Object -ExpandProperty Name
+
+        foreach ($member in $properties) {
+            $metadata[$member] = $appx.$member
+        }
+
+        $source = [PackageSourceInfo]::new($request.Path, $request.Path, $request.ProviderInfo)
+        $package = [PackageInfo]::new($appx.PackageName, $appx.Version.ToString(), $source, $appx.DisplayName, $null, $metadata, $request.ProviderInfo)
+        $request.WritePackage($package)
+    }
 
     [void] GetPackage([PackageRequest] $request) {
         $getAppxPackageParams = @{ Name = $request.Name }
