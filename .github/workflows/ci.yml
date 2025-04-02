@@ -25,7 +25,9 @@ jobs:
         run: Install-PSResource AnyPackage.NuGet -TrustRepository
 
       - name: Download Microsoft.Msix.Utils NuGet Package
-        run: Save-Package Microsoft.Msix.Utils
+        run: 
+          Import-Module AnyPackage.NuGet
+          Save-Package Microsoft.Msix.Utils
 
       - name: Copy Microsoft.Msix.Utils.dll to src
         run: Copy-Item ./Microsoft.Msix.Utils*/lib/netstandard2.0/Microsoft.Msix.Utils.dll ./src
