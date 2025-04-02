@@ -10,11 +10,21 @@ and this project adheres to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
-## [0.1.0] - 2024-03-27
+## [0.2.0] - 2025-04-01
+
+### Added
+
+- Add Install-Package (#5)
+- Add Find-Package (#4)
+- Add Uninstall-Package dynamic parameters (#3)
+- Add Uninstall-Package (#2)
+
+## [0.1.0] - 2025-03-27
 
 ### Added
 
 - Initial release
 
-[Unreleased]: https://github.com/anypackage/scoop/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/anypackage/scoop/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/anypackage/scoop/releases/tag/v0.2.0
 [0.1.0]: https://github.com/anypackage/scoop/releases/tag/v0.1.0
